@@ -1,9 +1,31 @@
 import sys
-
+import sqlite3
+import pandas as pd
+from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
-    pass
-
+    '''
+    OBJECTIVE:
+    This function reads two CSVs and transforms them into two distinct DataFrames. After that, they merged into a single DataFrame.
+    
+    INPUT:
+    messages_filepath - Message archive path
+    categories_filepath - Categories Message archive path
+    
+    OUTPUT:
+    df - Returns a DataFrame with the combination of information from the message and category datasets.
+    '''
+    
+    # Import message data
+    messages = pd.read_csv(messages_filepath)
+    
+    # Import category data
+    categories = pd.read_csv(categories_filepath)
+    
+    # Merge the two datasets together using the id
+    df = messages.merge(categories, how='outer', on=['id'])
+        
+    return df
 
 def clean_data(df):
     pass
