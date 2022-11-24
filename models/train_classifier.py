@@ -1,8 +1,53 @@
+# import libraries
 import sys
+import pickle
+import nltk
+nltk.download(['punkt', 'wordnet'])
 
+import re
+import numpy as np
+import pandas as pd
+from sqlalchemy import create_engine
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from sklearn.model_selection import GridSearchCV
+from sklearn.multioutput import MultiOutputClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
-def load_data(database_filepath):
-    pass
+def load_data(database_filepath, database_tablename='DisasterResponse'):
+    '''
+    OBJECTIVE:
+    The load_data function loads data from the database and puts it into a DataFrame. It also separates the DataFrame in two. X is an array of characteristic values, being known values, and y is a vector of target values, being the values you want to try to predict.
+    
+    INPUTS:
+    database_filepath: This variable represents the database path and file
+    database_tablename: This variable represents the table after the data treatment that is contained in the database file mentioned above.
+    
+    OUTPUTS:
+    X: The variable X contains the data from the columns,['related','request','offer',
+    'aid_related','medical_help','medical_products','search_and_rescue','security',
+    'military','child_alone','water','food','shelter','clothing','money','missing_people',
+    'refugees','death','other_aid','infrastructure_related','transport','buildings',
+    'electricity','tools','hospitals','shops','aid_centers','other_infrastructure',
+    'weather_related','floods','storm','fire','earthquake','cold','other_weather','direct_report'] of       the DataFrame.
+    
+    y: The variable y contains the data from the message column of the DataFrame
+    
+    target_names: Name of the columns of variable X
+    '''
+    # Creating a database connection and creating a DataFrame
+    engine = create_engine('sqlite:///' + database_filepath)
+    df = pd.read_sql_table(database_tablename, con=engine)
+    
+    X = df["message"]
+    Y = df.drop(['id', 'message', 'original', 'genre'], axis=1)
+    target_names = Y.columns.values
+
+    return X, Y, target_names
 
 
 def tokenize(text):
