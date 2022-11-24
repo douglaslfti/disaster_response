@@ -51,7 +51,38 @@ def load_data(database_filepath, database_tablename='DisasterResponse'):
 
 
 def tokenize(text):
-    pass
+    '''
+    OBJECTIVE:
+    The tokenize function treats the data, transforming it into lower, removing special characters that can get in the way when analyzing the text. To do this, we use normalization, tokenization and lemmatization techniques
+    
+    INPUT: 
+    text: The text variable in question are the messages that are contained in variable X 
+    
+    OUTPUT:
+    clean_tokens: Returns a list of the processed text
+    '''
+    
+    # Regex rule for eliminating improper characters
+    regex = '[^a-zA-Z0-9 ]'
+    
+    # This block serves to find the elements contained in the regex rule and replace them with empty.
+    detected_elements = re.findall(regex, text)
+    for element in detected_elements:
+        text = text.replace(element, "")
+   
+    # Applying the Tokenization technique to text
+    tokens = word_tokenize(text)
+    
+    # Instantiated WordNetLemmatizer
+    lemmatizer = WordNetLemmatizer()
+
+    # The following block of code is used to apply the lemmatizer technique to text and appending in a list
+    clean_tokens = []
+    for tok in tokens:
+        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
+        clean_tokens.append(clean_tok)
+
+    return clean_tokens
 
 
 def build_model():
