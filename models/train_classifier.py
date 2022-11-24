@@ -86,22 +86,82 @@ def tokenize(text):
 
 
 def build_model():
-    pass
+    '''
+    OBJECTIVES:
+    The build_model function is for creating the model based on pipeline features and using GridSearch to find the best parameters for the model. To do this, you must pass a dictionary with some values for GridSearch to search.
+    
+    INPUTS:
+    The function has no input variable
+    
+    OUTPUTS:
+    cv: Returns the model with the best parameter
+    '''
+    
+    # Creating the Pipeline
+    pipeline = Pipeline([
+    
+        ('text_pipeline', Pipeline([
+            ('vect', CountVectorizer(tokenizer=tokenize)),
+            ('tfidf', TfidfTransformer())
+        ])),
+    
+        ('clf', MultiOutputClassifier(RandomForestClassifier()))
+    ])
+
+    # Creating parameters for GridSearch
+    parameters = {
+        'clf__estimator__n_estimators': [10],
+        'clf__estimator__min_samples_split': [2, 3, 4]
+    }
+
+    # Searching for the best parameter
+    cv = GridSearchCV(pipeline, param_grid=parameters)
+    
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
-    pass
+    '''
+    This function evaluates how good the model is through the chosen metrics.
+    
+    INPUT:
+    model: The model
+    X_test - The variable X_test contains the predictions of our model
+    Y_test - The variable Y_test contains the test values
+    category_names - List with the names of evaluated columns
+    OUTPUT:
+    NONE
+    '''
+
+    # Predict function to calculate our predicted y
+    Y_pred = model.predict(X_test)
+    
+    # Print the metrics
+    print(classification_report(Y_test, Y_pred, target_names=category_names))
 
 
 def save_model(model, model_filepath):
-    pass
+    '''
+    This function is for saving the trained model.
+    
+    INPUT:
+    model: The model
+    model_filepath - Path where the model is going to be saved
+    
+    OUTPUT:
+    NONE
+    '''
+    
+    # This block of code export the model as a pickle file
+    with open(model_filepath, 'wb') as file:
+        pickle.dump(model, file)
 
 
 def main():
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
-        X, Y, category_names = load_data(database_filepath)
+        X, Y, category_names = load_data(database_filepath, database_tablename='DisasterResponse')
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
         
         print('Building model...')
