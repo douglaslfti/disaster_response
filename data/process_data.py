@@ -77,7 +77,22 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
-    pass  
+    '''
+    OBJECTIVE:
+    The function is for saving the DataFrame to a database
+    INPUT:
+    df - The variable contains a DataFrame with the data handled by the clean_data function
+    database_filename - Database file name
+
+    OUTPUT:
+    NONE
+    '''
+
+    # Connect to the sqlite database
+    engine = create_engine('sqlite:///' + database_filename)
+
+    # Save the dataframe in the sqlite database
+    df.to_sql('DisasterResponse', engine, index=False, if_exists='replace') 
 
 
 def main():
