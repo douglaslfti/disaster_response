@@ -103,7 +103,7 @@ def index():
             }
         },
         
-        # GRAPH 2 - Top 5 percentage graph    
+        # GRAPH 3 - Top 5 percentage graph    
         {
             'data': [
                 Bar(
