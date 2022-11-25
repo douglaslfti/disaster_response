@@ -1,5 +1,6 @@
 import json
 import plotly
+import heapq  
 import pandas as pd
 
 from nltk.stem import WordNetLemmatizer
@@ -26,11 +27,11 @@ def tokenize(text):
     return clean_tokens
 
 # load data
-engine = create_engine('sqlite:///../data/YourDatabaseName.db')
-df = pd.read_sql_table('YourTableName', engine)
+engine = create_engine('sqlite:///../data/DisasterResponse.db')
+df = pd.read_sql_table('DisasterResponse', engine)
 
 # load model
-model = joblib.load("../models/your_model_name.pkl")
+model = joblib.load("../models/classifier.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -43,9 +44,25 @@ def index():
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+    # Graph representing the percentage of values recorded with 1 per column
+    perc_values = (((df.iloc[:,4:] == 1).sum().values / df.shape[0]) * 100).round(2)
+    perc_columns = df.iloc[:,4:].columns
+    
+    # Graph representing the top 5 percent of recorded values with 1 per column
+    perc_5_values = (((df.iloc[:,4:] == 1).sum().values / df.shape[0]) * 100).round(2)
+    perc_5_columns = df.iloc[:,4:].columns
+    zipped = zip(perc_5_values, perc_5_columns)
+    # Takes the top 5 values
+    highest_values = heapq.nlargest(5,zipped)
+    column_5_name = []
+    perc_5_value = []
+    [column_5_name.append(highest_values[index][1]) for index in range(len(highest_values))]
+    [perc_5_value.append(highest_values[index][0]) for index in range(len(highest_values))]
+    
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
+        # GRAPH 1 - genre graph
         {
             'data': [
                 Bar(
@@ -61,6 +78,48 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        
+        # GRAPH 2 - percentage graph    
+        {
+            'data': [
+                Bar(
+                    x=perc_columns,
+                    y=perc_values
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Percentage equal 1 per Categories',
+                'yaxis': {
+                    'title': "Percentage"
+                },
+                'xaxis': {
+                    'title': "Category",
+                    'tickangle': 35
+                }
+            }
+        },
+        
+        # GRAPH 2 - Top 5 percentage graph    
+        {
+            'data': [
+                Bar(
+                    x=column_5_name,
+                    y=perc_5_value
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of top 5 Percentage equal 1 per Categories',
+                'yaxis': {
+                    'title': "Percentage"
+                },
+                'xaxis': {
+                    'title': "Category",
+                    'tickangle': 35
                 }
             }
         }
@@ -93,7 +152,7 @@ def go():
 
 
 def main():
-    app.run(host='0.0.0.0', port=3001, debug=True)
+    app.run(host='0.0.0.0', port=3000, debug=True)
 
 
 if __name__ == '__main__':
