@@ -24,7 +24,7 @@ It also allowed me to use data from Figure Eight to understand better:
 ## File Descriptions <a name="files"></a>
 
 In this project it is organized as follows:
-
+'''
 ├── app
     ├── template
     │   ├── master.html     # main page of web app
@@ -39,7 +39,7 @@ In this project it is organized as follows:
     ├── train_classifier.py
     └── classifier.pkl      # saved model
 ├── README.md
-
+'''
 The'app' folder  contains the file 'run.py', which you need to "run" to get the project "online", and a folder named 'template'. In addition, this folder contains two HTML files ('go.html' and 'master.html'). These HTML files developed with HTML and flask serve to show the project's result and to make input for new predictions.
 
 The 'data' folder has four files in total. First, two CSV files ("disaster_categories.csv" and "disaster_messages.csv") contain the data to be worked on in this project. Next, the "DisasterResponse.db" file includes the data handled from the above CSV files. Finally, the file "process_data.py" contains the code where the transformations of the information available in the CSV files occur.
