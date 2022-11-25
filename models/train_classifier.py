@@ -2,7 +2,7 @@
 import sys
 import pickle
 import nltk
-nltk.download(['punkt', 'wordnet'])
+nltk.download(['punkt', 'wordnet', 'stopwords'])
 
 import re
 import numpy as np
@@ -10,6 +10,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
 from sklearn.model_selection import GridSearchCV
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -20,24 +21,24 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 def load_data(database_filepath, database_tablename='DisasterResponse'):
     '''
-    OBJECTIVE:
+    load_data:
     The load_data function loads data from the database and puts it into a DataFrame. It also separates the DataFrame in two. X is an array of characteristic values, being known values, and y is a vector of target values, being the values you want to try to predict.
     
-    INPUTS:
-    database_filepath: This variable represents the database path and file
-    database_tablename: This variable represents the table after the data treatment that is contained in the database file mentioned above.
+    Input:
+    database_filepath       This variable represents the database path and file
+    database_tablename      This variable represents the table after the data treatment that is contained in the database file mentioned above.
     
-    OUTPUTS:
-    X: The variable X contains the data from the columns,['related','request','offer',
-    'aid_related','medical_help','medical_products','search_and_rescue','security',
-    'military','child_alone','water','food','shelter','clothing','money','missing_people',
-    'refugees','death','other_aid','infrastructure_related','transport','buildings',
-    'electricity','tools','hospitals','shops','aid_centers','other_infrastructure',
-    'weather_related','floods','storm','fire','earthquake','cold','other_weather','direct_report'] of       the DataFrame.
+    Returns:
+    X              The variable X contains the data from the columns,['related','request','offer',
+                    'aid_related','medical_help','medical_products','search_and_rescue','security',
+                    'military','child_alone','water','food','shelter','clothing','money','missing_people',
+                    'refugees','death','other_aid','infrastructure_related','transport','buildings',
+                    'electricity','tools','hospitals','shops','aid_centers','other_infrastructure',
+                    'weather_related','floods','storm','fire','earthquake','cold','other_weather','direct_report'] of       the DataFrame.
     
-    y: The variable y contains the data from the message column of the DataFrame
+    y               The variable y contains the data from the message column of the DataFrame
     
-    target_names: Name of the columns of variable X
+    target_names    Name of the columns of variable X
     '''
     # Creating a database connection and creating a DataFrame
     engine = create_engine('sqlite:///' + database_filepath)
@@ -52,14 +53,14 @@ def load_data(database_filepath, database_tablename='DisasterResponse'):
 
 def tokenize(text):
     '''
-    OBJECTIVE:
+    tokenize
     The tokenize function treats the data, transforming it into lower, removing special characters that can get in the way when analyzing the text. To do this, we use normalization, tokenization and lemmatization techniques
     
-    INPUT: 
-    text: The text variable in question are the messages that are contained in variable X 
+    Input: 
+    text        The text variable in question are the messages that are contained in variable X 
     
-    OUTPUT:
-    clean_tokens: Returns a list of the processed text
+    Returns:
+    clean_tokens    Returns a list of the processed text
     '''
     
     # Regex rule for eliminating improper characters
@@ -73,6 +74,12 @@ def tokenize(text):
     # Applying the Tokenization technique to text
     tokens = word_tokenize(text)
     
+    # Defining stop words
+    stop_words = set(stopwords.words('english'))
+
+    # Remove stop words
+    tokens = [tok for tok in tokens if tok not in stop_words]
+
     # Instantiated WordNetLemmatizer
     lemmatizer = WordNetLemmatizer()
 
@@ -87,14 +94,14 @@ def tokenize(text):
 
 def build_model():
     '''
-    OBJECTIVES:
+    build_model:
     The build_model function is for creating the model based on pipeline features and using GridSearch to find the best parameters for the model. To do this, you must pass a dictionary with some values for GridSearch to search.
     
-    INPUTS:
+    Input:
     The function has no input variable
     
-    OUTPUTS:
-    cv: Returns the model with the best parameter
+    Returns:
+    cv      Returns the model with the best parameter
     '''
     
     # Creating the Pipeline
@@ -115,21 +122,23 @@ def build_model():
     }
 
     # Searching for the best parameter
-    cv = GridSearchCV(pipeline, param_grid=parameters)
+    cv = GridSearchCV(pipeline, param_grid=parameters, verbose=3)
     
     return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
     '''
+    evaluate_model:
     This function evaluates how good the model is through the chosen metrics.
     
-    INPUT:
-    model: The model
-    X_test - The variable X_test contains the predictions of our model
-    Y_test - The variable Y_test contains the test values
-    category_names - List with the names of evaluated columns
-    OUTPUT:
+    Input:
+    model           The model
+    X_test          The variable X_test contains the predictions of our model
+    Y_test          The variable Y_test contains the test values
+    category_names  List with the names of evaluated columns
+
+    Returns:
     NONE
     '''
 
@@ -142,13 +151,14 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 def save_model(model, model_filepath):
     '''
+    save_model:
     This function is for saving the trained model.
     
-    INPUT:
-    model: The model
-    model_filepath - Path where the model is going to be saved
+    Input:
+    model           The model
+    model_filepath  Path where the model is going to be saved
     
-    OUTPUT:
+    Returns:
     NONE
     '''
     
