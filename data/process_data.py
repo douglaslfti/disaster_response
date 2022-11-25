@@ -5,15 +5,15 @@ from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
     '''
-    OBJECTIVE:
+    load_data
     This function reads two CSVs and transforms them into two distinct DataFrames. After that, they merged into a single DataFrame.
     
-    INPUT:
-    messages_filepath - Message archive path
-    categories_filepath - Categories Message archive path
+    Input:
+    messages_filepath       Message archive path
+    categories_filepath     Categories Message archive path
     
-    OUTPUT:
-    df - Returns a DataFrame with the combination of information from the message and category datasets.
+    Returns:
+    df      Returns a DataFrame with the combination of information from the message and category datasets.
     '''
     
     # Import message data
@@ -29,14 +29,14 @@ def load_data(messages_filepath, categories_filepath):
 
 def clean_data(df):
   '''
-  OBJECTIVE:
+  clean_data
   This function is used to process the data. It removes duplicate data, renames the columns for better understanding, and corrects the data to be binarized.
   
-  INPUT:
-  df - DataFrame containing the data.
+  Input:
+  df    DataFrame containing the data.
   
-  OUTPUT:
-  df - Returns the DataFrame with the processed data.
+  Returns:
+  df    Returns the DataFrame with the processed data.
   '''
   # Create a dataframe of the 36 individual category columns
   categories = df['categories'].str.split(';', expand=True)
@@ -78,13 +78,14 @@ def clean_data(df):
 
 def save_data(df, database_filename):
     '''
-    OBJECTIVE:
+    save_data
     The function is for saving the DataFrame to a database
-    INPUT:
-    df - The variable contains a DataFrame with the data handled by the clean_data function
+
+    Input:
+    df    The variable contains a DataFrame with the data handled by the clean_data function
     database_filename - Database file name
 
-    OUTPUT:
+    Returns:
     NONE
     '''
 
