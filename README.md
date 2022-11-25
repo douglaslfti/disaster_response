@@ -25,23 +25,36 @@ It also allowed me to use data from Figure Eight to understand better:
 
 In this project it is organized as follows:
 
-It uses [use-tree-state](https://www.npmjs.com/package/use-tree-state) hook internally for convenient state management.
-![folder-tree-demo](/assets/folder-tree-demo.gif)
-
-├── app
-    ├── template
-    │   ├── master.html     # main page of web app
-    │   ├── go.html         # classification result page of web app
-    └── run.py # Flask file that runs app
-├── data
-    ├── disaster_categories.csv     # data to process
-    ├── disaster_messages.csv       # data to process
-    ├── process_data.py
-    └── DisasterResponse.db         # database to save clean data to
-├── models
-    ├── train_classifier.py
-    └── classifier.pkl      # saved model
-├── README.md
+<ul>
+  <li><span>app</span>
+    <ul>
+      <li>Template</li>
+      	<ul>
+          <li>master.html	 # main page of web app</li>
+          <li>go.html        # classification result page of web app</li>
+        </ul>
+      <li>run.py # Flask file that runs app</li>
+      </li>  
+    </ul>
+  </li>
+  <li><span>data</span>
+    <ul>
+      <li>disaster_categories.csv     # data to process</li>
+      <li>disaster_messages.csv       # data to process</li>
+      <li>process_data.py</li>
+      <li>DisasterResponse.db         # database to save clean data to</li>
+      </li>  
+    </ul>
+  </li>
+  <li><span>models</span>
+    <ul>
+      <li>train_classifier.py</li>
+      <li>classifier.pkl      # saved model</li>
+      </li>  
+    </ul>
+  </li>
+  <li><span>README.md</span>
+</ul>
 
 The'app' folder  contains the file 'run.py', which you need to "run" to get the project "online", and a folder named 'template'. In addition, this folder contains two HTML files ('go.html' and 'master.html'). These HTML files developed with HTML and flask serve to show the project's result and to make input for new predictions.
 
