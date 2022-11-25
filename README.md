@@ -13,7 +13,9 @@ For the project to run perfectly, the following packages must be installed in th
 
 ## Project Motivation<a name="motivation"></a>
 
-For this project, I was interestested in using data from Figure Eight to better understand:
+This project plays a significant role in the community, as it will be possible to help people or companies to cope better in critical situations, such as a disaster caused by some natural phenomenon. 
+
+It also allowed me to use data from Figure Eight to understand better:
 
 1. How to work with natural language.
 2. Understand how Pipelines to facilitate project development.
@@ -23,11 +25,26 @@ For this project, I was interestested in using data from Figure Eight to better 
 
 In this project it is organized as follows:
 
-The project has three folders app, data and models. The first folder contains the file 'run.py' that you need to "run" to get the project "online". In addition to this file, a template subfolder contains two HTML format files ('go.html' and 'master.html'). These HTML files developed with HTML and flask serve to show the project's result and to make input for new predictions.
+app
+| - template
+| |- master.html # main page of web app
+| |- go.html # classification result page of web app
+|- run.py # Flask file that runs app
+data
+|- disaster_categories.csv # data to process
+|- disaster_messages.csv # data to process
+|- process_data.py
+|- DisasterResponse.db # database to save clean data to
+models
+|- train_classifier.py
+|- classifier.pkl # saved model
+README.md
 
-The data folder has four files in total. First, two CSV files ("disaster_categories.csv" and "disaster_messages.csv") contain the data to be worked on in this project. Next, the "DisasterResponse.db" file includes the data handled from the above CSV files. Finally, the file "process_data.py" contains the code where the transformations of the information available in the CSV files occur.
+The'app' folder  contains the file 'run.py', which you need to "run" to get the project "online", and a folder named 'template'. In addition, this folder contains two HTML files ('go.html' and 'master.html'). These HTML files developed with HTML and flask serve to show the project's result and to make input for new predictions.
 
-Finally, the last folder of the project consists of the files "classifier.pkl" and "train_classifier.py". The first file represents the trained and saved model. The second file contains the code with machine learning and natural language techniques.
+The 'data' folder has four files in total. First, two CSV files ("disaster_categories.csv" and "disaster_messages.csv") contain the data to be worked on in this project. Next, the "DisasterResponse.db" file includes the data handled from the above CSV files. Finally, the file "process_data.py" contains the code where the transformations of the information available in the CSV files occur.
+
+Finally, the 'models' folder consists of the files "classifier.pkl" and "train_classifier.py". The first file represents the trained and saved model. The second file contains the code with machine learning and natural language techniques.
 
 ## Run <a name="run"></a>
 
